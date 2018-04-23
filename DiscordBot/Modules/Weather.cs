@@ -16,6 +16,26 @@ namespace DiscordBot.Modules
 		[Command("weather")]
 		public async Task WeatherAsync([Remainder]string city = "London")
 		{
+			JToken data = GetYahooData(city);
+			EmbedBuilder response = BuildResponse(data);
+
+			await ReplyAsync("", false, response);
+		}
+
+		private EmbedBuilder BuildResponse(JToken data)
+		{
+			EmbedBuilder embedBuilder = new EmbedBuilder();
+			var locaiton = data["location"];
+			var forecast = data["item"]["forecast"][0];
+			embedBuilder.AddField("City", $"{locaiton["city"]}, {locaiton["country"]}")
+				.AddInlineField("Temperature - High", $"{forecast["high"]}F / {FarenheitToCelcius((double)forecast["high"])}C")
+				.AddInlineField("Temperature - Low", $"{forecast["low"]}F / {FarenheitToCelcius((double)forecast["low"])}C")
+				.AddField("Sky", forecast["text"]);
+			return embedBuilder;
+		}
+
+		private static JToken GetYahooData(string city)
+		{
 			var url = new StringBuilder();
 			url.Append(@"https://query.yahooapis.com/v1/public/yql?q=");
 			url.Append(UrlEncoder.Default.Encode($"select * from weather.forecast where woeid in (select woeid from geo.places(1) where text=\"{city}\")"));
@@ -29,16 +49,7 @@ namespace DiscordBot.Modules
 
 			var dataObject = JObject.Parse(result);
 			var data = dataObject["query"]["results"]["channel"];
-
-			EmbedBuilder embedBuilder = new EmbedBuilder();
-			var locaiton = data["location"];
-			var forecast = data["item"]["forecast"][0];
-			embedBuilder.AddField("City", $"{locaiton["city"]}, {locaiton["country"]}")
-				.AddInlineField("Temperature - High", $"{forecast["high"]}F / {FarenheitToCelcius((double)forecast["high"])}C")
-				.AddInlineField("Temperature - Low", $"{forecast["low"]}F / {FarenheitToCelcius((double)forecast["low"])}C")
-				.AddField("Sky", forecast["text"]);
-
-			await ReplyAsync("", false, embedBuilder);
+			return data;
 		}
 
 		private double FarenheitToCelcius(double farenheit)
