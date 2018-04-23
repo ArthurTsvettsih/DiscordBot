@@ -35,9 +35,9 @@ namespace DiscordBot
 			await Task.Delay(-1); //Keep the clientr alive forever
 		}
 
-		private Task Log(LogMessage arg)
+		private Task Log(LogMessage message)
 		{
-			Console.WriteLine(arg);
+			Console.WriteLine(message);
 
 			return Task.CompletedTask;
 		}
