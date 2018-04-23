@@ -32,7 +32,7 @@ namespace DiscordBot
 			await RegisterCommandsAsync();
 			await _client.LoginAsync(TokenType.Bot, botToken);
 			await _client.StartAsync();
-			await Task.Delay(-1); //Keep the clientr alive forever
+			await Task.Delay(-1); //Keep the client alive forever
 		}
 
 		private Task Log(LogMessage message)

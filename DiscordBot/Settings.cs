@@ -8,12 +8,16 @@ namespace DiscordBot
 	class Settings
 	{
 		public string botKey;
+		public string raffleParticipantFilepath;
+		public string rafflesFolder;
 
 		private const string _settingsFilePath = "C:/DiscordBot/Settings.txt";
 		
 		private void SetSettings(JObject settings)
 		{
 			botKey = settings["BotKey"].ToString();
+			raffleParticipantFilepath = settings["RaffleParticipantFilepath"].ToString();
+			rafflesFolder = settings["RafflesFolder"].ToString();
 		}
 
 		#region Singleton Implementation

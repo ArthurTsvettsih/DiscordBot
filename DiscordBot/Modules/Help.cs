@@ -18,7 +18,9 @@ namespace DiscordBot.Modules
 			embedBuilder
 				.AddField("ab!help", "Displays a list of available commands with examples")
 				.AddField("ab!weather London", "Gets the weather information for the specified city")
-				.AddField("ab!raffle everyone", "Chooses a random person with the specified role");
+
+				//.AddField("ab!raffle_role everyone", "Chooses a random person with the specified role") //Disabled for now
+				.AddField("ab!raffle_add @Username", "Add a person to a raffle");
 
 			await ReplyAsync("", false, embedBuilder.Build());
 		}

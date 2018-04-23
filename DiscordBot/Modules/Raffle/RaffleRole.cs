@@ -1,16 +1,13 @@
-﻿using Discord;
-using Discord.Commands;
+﻿using Discord.Commands;
 using System;
-using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
 
-namespace DiscordBot.Modules
+namespace DiscordBot.Modules.Raffle
 {
-	public class Raffle : ModuleBase<SocketCommandContext>
+	public class RaffleRole : ModuleBase<SocketCommandContext>
 	{
-		[Command("raffle")]
+		//[Command("raffle_role")]
 		public async Task RaffleAsync([Remainder]string roleInput = "everyone")
 		{
 			var parsedRoleInput = roleInput.ToLower().Replace("@", String.Empty);
