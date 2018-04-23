@@ -11,7 +11,7 @@ namespace DiscordBot.Modules
 	public class Raffle : ModuleBase<SocketCommandContext>
 	{
 		[Command("raffle")]
-		public async Task RaffleAsync(string roleInput = "everyone")
+		public async Task RaffleAsync([Remainder]string roleInput = "everyone")
 		{
 			var parsedRoleInput = roleInput.ToLower().Replace("@", String.Empty);
 			var raffleRole = Context.Guild.Roles.Where(role => role.Name.ToLower().Replace("@", String.Empty) == parsedRoleInput).FirstOrDefault();
