@@ -1,5 +1,6 @@
 ﻿using Discord;
 using Discord.Commands;
+using DiscordBot.Extensions;
 using DiscordBot.Helpers;
 using DiscordBot.Objects.Raffle;
 using System;
@@ -12,8 +13,7 @@ namespace DiscordBot.Modules.Raffle
 	public class RaffleAdd : ModuleBase<SocketCommandContext>
 	{
 		private RaffleHelpers raffleHelpers = new RaffleHelpers();
-
-		//Verify that is a valid user
+		private UserHelpers userHelpers = new UserHelpers();
 
 		[Command("raffle_add")]
 		public async Task RaffleAsync([Remainder]string raffleDetails)
@@ -24,8 +24,7 @@ namespace DiscordBot.Modules.Raffle
 			var noofTickets = Int32.Parse(raffleDetails.Split(';').LastOrDefault().Trim(' '));
 			var raffleFilepath = raffleHelpers.GetRaffleFilepath(raffleName);
 			EmbedBuilder embedBuilder = new EmbedBuilder();
-
-			//TODO: account for expired raffles
+			
 			if (!File.Exists(raffleFilepath))
 			{
 				embedBuilder
@@ -36,31 +35,37 @@ namespace DiscordBot.Modules.Raffle
 				return;
 			}
 			var raffle = raffleHelpers.GetRaffle(raffleName);
+
+			if (raffle.endDate > DateTime.MinValue)
+			{
+				embedBuilder
+					.WithColor(Color.Red)
+					.WithTitle(Properties.Resources.TitleHmm)
+					.WithDescription($"{raffle.name} has ended on {raffle.endDate} UTC")
+					.AddInlineField("Winner", userHelpers.GetUserName(userHelpers.GetDiscordUser(raffleHelpers.GetRaffleWinner(raffle).discordID, Context)))
+					.AddInlineField("Reward", $"{raffle.reward}");
+
+				await ReplyAsync("", false, embedBuilder);
+				return;
+			}
+
 			if (raffle.participants.Any(participant => participant.discordID == userToAdd.Id))
 			{
 				embedBuilder
 				.WithTitle(Properties.Resources.TitleHmm)
-				.WithDescription($"{new UserHelpers().GetUserName(userToAdd)} is already participating!")
+				.WithDescription($"{userHelpers.GetUserName(userToAdd)} is already participating!")
 				.WithColor(Color.Red);
 				await ReplyAsync("", false, embedBuilder);
 				return;
 			}
 
-			var newParticipant = new RaffleParticipant()
-			{
-				username = userToAdd.Username,
-				nickname = userToAdd.Nickname,
-				dateAdded = DateTime.UtcNow,
-				discordID = userToAdd.Id,
-				isWinner = false,
-				noofTickets = noofTickets
-			};
+			var newParticipant = userToAdd.ToRaffleParticipant();
 			raffle.participants.Add(newParticipant);
 			raffleHelpers.CreateUpdateRaffle(raffle);
 
 			embedBuilder
 			.WithTitle(Properties.Resources.TitleYay)
-			.WithDescription($"{new UserHelpers().GetUserName(userToAdd)} has been added to {raffle.name}!")
+			.WithDescription($"{userHelpers.GetUserName(userToAdd)} has been added to {raffle.name}!")
 			.WithColor(Color.Green);
 
 			await ReplyAsync("", false, embedBuilder);

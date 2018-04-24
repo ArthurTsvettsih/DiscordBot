@@ -1,5 +1,6 @@
 ﻿using Discord;
 using Discord.Commands;
+using DiscordBot.Extensions;
 using DiscordBot.Helpers;
 using System;
 using System.IO;
@@ -55,7 +56,9 @@ namespace DiscordBot.Modules.Raffle
 			{
 				name = details[0].Trim(),
 				plannedEndDate = WorkoutEndDate(details[1]),
-				reward = details[2].Trim()
+				reward = details[2].Trim(),
+				startDate = DateTime.UtcNow,
+				creator = Context.User.ToRaffleParticipant()
 			};
 			return raffle;
 		}
