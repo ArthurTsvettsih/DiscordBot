@@ -8,7 +8,7 @@ using System.Xml.Serialization;
 
 namespace DiscordBot.Helpers
 {
-	class Xml
+	class XmlHelpers
 	{
 		//source: https://stackoverflow.com/questions/6115721/how-to-save-restore-serializable-object-to-from-file
 		public void SerializeObject<T>(T serializableObject, string filepath)

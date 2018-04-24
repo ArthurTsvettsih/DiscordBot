@@ -10,23 +10,28 @@ namespace DiscordBot.Modules.Raffle
 {
 	public class RaffleCreate : ModuleBase<SocketCommandContext>
 	{
+		private RaffleHelpers raffleHelpers = new RaffleHelpers();
+
 		[Command("raffle_create")]
 		public async Task RaffleCreateAsync([Remainder]string raffleDetails)
 		{
 			Objects.Raffle.Raffle raffle = CreateRaffle(raffleDetails);
+			await HandleCreating(raffle);
+		}
 
-			var xml = new Xml();
-			var filepath = $"{Settings.I.rafflesFolder}/{raffle.name}/Raffle.xml";
+		//TODO: Consider different guilds
+		private async Task HandleCreating(Objects.Raffle.Raffle raffle)
+		{
+			var filepath = raffleHelpers.GetRaffleFilepath(raffle.name);
 
 			EmbedBuilder embedBuilder = new EmbedBuilder();
 
-			if (!Directory.Exists($"{Settings.I.rafflesFolder}/{raffle.name}"))
+			if (!File.Exists(filepath))
 			{
-				Directory.CreateDirectory($"{Settings.I.rafflesFolder}/{raffle.name}");
-				xml.SerializeObject(raffle, filepath);
+				raffleHelpers.CreateUpdateRaffle(raffle);
 
 				embedBuilder
-					.WithTitle("Let's do this! :sunglasses:")
+					.WithTitle(Properties.Resources.TitleLetsDoThis)
 					.WithDescription($"{raffle.name} has been successfully created!");
 
 				await ReplyAsync("", false, embedBuilder);
@@ -34,7 +39,7 @@ namespace DiscordBot.Modules.Raffle
 			else
 			{
 				embedBuilder
-				.WithTitle("Hmmm :thinking:")
+				.WithTitle(Properties.Resources.TitleHmm)
 				.WithDescription($"{raffle.name} already exists");
 
 				await ReplyAsync("", false, embedBuilder);
@@ -48,7 +53,7 @@ namespace DiscordBot.Modules.Raffle
 			{
 				name = details[0].Trim(),
 				endDate = WorkoutEndDate(details[1]),
-				reward = details[0].Trim()
+				reward = details[2].Trim()
 			};
 			return raffle;
 		}
