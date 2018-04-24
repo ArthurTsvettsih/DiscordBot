@@ -32,7 +32,8 @@ namespace DiscordBot.Modules.Raffle
 
 				embedBuilder
 					.WithTitle(Properties.Resources.TitleLetsDoThis)
-					.WithDescription($"{raffle.name} has been successfully created!");
+					.WithDescription($"{raffle.name} has been successfully created!")
+					.WithColor(Color.Green);
 
 				await ReplyAsync("", false, embedBuilder);
 			}
@@ -40,7 +41,8 @@ namespace DiscordBot.Modules.Raffle
 			{
 				embedBuilder
 				.WithTitle(Properties.Resources.TitleHmm)
-				.WithDescription($"{raffle.name} already exists");
+				.WithDescription($"{raffle.name} already exists")
+				.WithColor(Color.Red);
 
 				await ReplyAsync("", false, embedBuilder);
 			}
@@ -52,7 +54,7 @@ namespace DiscordBot.Modules.Raffle
 			var raffle = new Objects.Raffle.Raffle()
 			{
 				name = details[0].Trim(),
-				endDate = WorkoutEndDate(details[1]),
+				plannedEndDate = WorkoutEndDate(details[1]),
 				reward = details[2].Trim()
 			};
 			return raffle;

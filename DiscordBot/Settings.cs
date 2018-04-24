@@ -10,6 +10,7 @@ namespace DiscordBot
 		public string botKey;
 		public string raffleParticipantFilepath;
 		public string rafflesFolder;
+		public string botKeyWord;
 
 		private const string _settingsFilePath = "C:/DiscordBot/Settings.txt";
 		
@@ -18,6 +19,7 @@ namespace DiscordBot
 			botKey = settings["BotKey"].ToString();
 			raffleParticipantFilepath = settings["RaffleParticipantFilepath"].ToString();
 			rafflesFolder = settings["RafflesFolder"].ToString();
+			botKeyWord = settings["BotKeyWord"].ToString();
 		}
 
 		#region Singleton Implementation

@@ -57,7 +57,7 @@ namespace DiscordBot
 
 			int argumentPosition = 0;
 
-			if (message.HasStringPrefix("ab!", ref argumentPosition) || message.HasMentionPrefix(_client.CurrentUser, ref argumentPosition))
+			if (message.HasStringPrefix(Settings.I.botKeyWord, ref argumentPosition) || message.HasMentionPrefix(_client.CurrentUser, ref argumentPosition))
 			{
 				var context = new SocketCommandContext(_client, message);
 

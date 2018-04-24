@@ -27,7 +27,9 @@ namespace DiscordBot.Modules
 			EmbedBuilder embedBuilder = new EmbedBuilder();
 			var locaiton = data["location"];
 			var forecast = data["item"]["forecast"][0];
-			embedBuilder.AddField("City", $"{locaiton["city"]}, {locaiton["country"]}")
+			embedBuilder
+				.WithColor(Color.Gold)
+				.AddField("City", $"{locaiton["city"]}, {locaiton["country"]}")
 				.AddInlineField("Temperature - High", $"{forecast["high"]}F / {FarenheitToCelcius((double)forecast["high"])}C")
 				.AddInlineField("Temperature - Low", $"{forecast["low"]}F / {FarenheitToCelcius((double)forecast["low"])}C")
 				.AddField("Sky", forecast["text"]);

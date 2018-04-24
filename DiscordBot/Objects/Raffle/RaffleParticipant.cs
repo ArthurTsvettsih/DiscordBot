@@ -11,5 +11,6 @@ namespace DiscordBot.Objects.Raffle
 		public ulong discordID { get; set; }
 		public DateTime dateAdded { get; set; }
 		public bool isWinner { get; set; }
+		public int noofTickets { get; set; }
 	}
 }

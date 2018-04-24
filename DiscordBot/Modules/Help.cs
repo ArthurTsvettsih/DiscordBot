@@ -16,6 +16,7 @@ namespace DiscordBot.Modules
 			EmbedBuilder embedBuilder = new EmbedBuilder();
 
 			embedBuilder
+				.WithColor(Color.Gold)
 				.AddField("ab!help", "Displays a list of available commands with examples")
 				.AddField("ab!weather London", "Gets the weather information for the specified city")
 

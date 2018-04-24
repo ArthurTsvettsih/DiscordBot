@@ -10,7 +10,7 @@ namespace DiscordBot.Modules
 	public class Ping : ModuleBase<SocketCommandContext>
 	{
 		
-		[Command("ping")]
+		//[Command("ping")]
 		public async Task PingAsync()
 		{
 			EmbedBuilder embedBuilder = new EmbedBuilder();
